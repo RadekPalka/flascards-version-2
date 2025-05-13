@@ -1,17 +1,20 @@
 package pl.radekpalka.flashcards.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+
 import pl.radekpalka.flashcards.dto.user.RegisterRequestDto;
 import pl.radekpalka.flashcards.dto.user.UserResponseDto;
 import pl.radekpalka.flashcards.model.User;
+public class UserMapper {
 
-@Mapper(componentModel = "spring")
-public interface UserMapper {
+    public static User toUser(RegisterRequestDto dto) {
+        User user = new User();
+        user.setLogin(dto.getLogin());
+        user.setPassword(dto.getPassword());
+        return user;
+    }
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
-    User toUser(RegisterRequestDto dto);
-
-    UserResponseDto toUserResponseDto(User user);
+    public static UserResponseDto toUserResponseDto(User user) {
+        return new UserResponseDto(user.getId(), user.getLogin());
+    }
 }
+

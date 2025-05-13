@@ -3,11 +3,15 @@ package pl.radekpalka.flashcards.dto.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterRequestDto {
     @NotBlank(message = "Login cannot be blank")
     @Size(min = 3, max = 20, message = "Login must be between 3 and 20 characters")
@@ -20,4 +24,5 @@ public class RegisterRequestDto {
             message = "Password must contain at least one lowercase letter, one uppercase letter, and one digit"
     )
     private String password;
+
 }
