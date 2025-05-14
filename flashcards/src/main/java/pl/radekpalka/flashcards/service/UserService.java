@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
+import pl.radekpalka.flashcards.dto.user.LoginRequestDto;
 import pl.radekpalka.flashcards.dto.user.RegisterRequestDto;
 import pl.radekpalka.flashcards.dto.user.UserResponseDto;
 import pl.radekpalka.flashcards.mapper.UserMapper;
@@ -26,5 +27,18 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         User saved = userRepository.save(user);
         return new UserResponseDto(saved.getId(), saved.getLogin());
+    }
+
+    public UserResponseDto login(LoginRequestDto dto){
+        User user = userRepository.findByLogin(dto.getLogin())
+                .orElseThrow(()-> new RuntimeException("Invalid login or password"));
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())){
+            throw new RuntimeException("Invalid login or password");
+        }
+
+        return  new UserResponseDto(user.getId(), user.getLogin());
+
+
     }
 }
