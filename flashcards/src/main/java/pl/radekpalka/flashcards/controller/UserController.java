@@ -1,6 +1,8 @@
 package pl.radekpalka.flashcards.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.radekpalka.flashcards.dto.user.LoginRequestDto;
@@ -25,8 +27,23 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody @Valid LoginRequestDto dto){
+    public ResponseEntity<UserResponseDto> login(
+            @RequestBody @Valid LoginRequestDto dto,
+            HttpSession session
+    ){
         UserResponseDto response = userService.login(dto);
+        session.setAttribute("userId", response.getId());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(HttpSession session) {
+        Object userId = session.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged");
+        }
+
+        return ResponseEntity.ok("userId: " + userId);
     }
 }
