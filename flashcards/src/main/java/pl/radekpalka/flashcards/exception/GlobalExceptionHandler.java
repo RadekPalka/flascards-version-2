@@ -5,6 +5,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public ResponseEntity<Map<String, String>> handleHttpStatusCodeException(HttpStatusCodeException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("message", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
